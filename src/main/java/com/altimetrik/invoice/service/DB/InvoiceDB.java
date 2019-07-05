@@ -1,4 +1,4 @@
-package com.altimetrik.invoice.service;
+package com.altimetrik.invoice.service.DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,7 +46,7 @@ public class InvoiceDB {
 			
 			while(rs.next())  {
 				 
-				 System.out.println("\n");
+				 System.out.println("----------------------------------------------------------------------------------------");
 				 System.out.println("Invoice No: " +rs.getString(1));
 				 System.out.println("Invoice Date: " +rs.getString(2));
 				 System.out.println("Customer PO: " +rs.getString(3));

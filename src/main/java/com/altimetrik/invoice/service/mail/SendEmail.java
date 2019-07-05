@@ -1,4 +1,4 @@
-package com.altimetrik.invoice.service;
+package com.altimetrik.invoice.service.mail;
 
 import java.util.Properties;
 

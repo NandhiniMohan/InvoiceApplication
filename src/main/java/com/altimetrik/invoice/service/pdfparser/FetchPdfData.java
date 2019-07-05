@@ -1,8 +1,11 @@
-package com.altimetrik.invoice.service;
+package com.altimetrik.invoice.service.pdfparser;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.text.PDFTextStripper;
+
+import com.altimetrik.invoice.service.DB.InvoiceDB;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -15,6 +18,12 @@ public class FetchPdfData {
 	public void doPdfExtraction(File targetFile, Address From) throws InvalidPasswordException, IOException {
 
 		int count = 0;
+		if(targetFile == null)
+		{
+			System.out.println("No Mails Received!!!!!!");
+		}
+		else
+		{
 		try (PDDocument pdfDocument = PDDocument.load(targetFile)) {
 
 			pdfDocument.getClass();
@@ -58,5 +67,5 @@ public class FetchPdfData {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}}
 }

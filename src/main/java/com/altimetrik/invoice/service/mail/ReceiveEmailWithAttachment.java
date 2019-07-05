@@ -1,4 +1,4 @@
-package com.altimetrik.invoice.service;
+package com.altimetrik.invoice.service.mail;
 
 import java.io.File;
 import java.io.InputStream;
@@ -17,14 +17,15 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 
-import com.altimetrik.invoice.service.FetchPdfData;
+import com.altimetrik.invoice.service.pdfparser.FetchPdfData;
 
 public class ReceiveEmailWithAttachment {
 	
 	static File targetFile;
 	static Address From ;
+	static Message[] messages;
 	
-	public static void receiveEmail(String pop3Host, String mailStoreType, String userName, String password) {
+	public static int receiveEmail(String pop3Host, String mailStoreType, String userName, String password) {
 		
 		Properties props = new Properties();
 		props.put("mail.store.protocol", "pop3");
@@ -42,7 +43,7 @@ public class ReceiveEmailWithAttachment {
 			Folder emailFolder = store.getFolder("INBOX");
 			emailFolder.open(Folder.READ_ONLY);
 
-			Message[] messages = emailFolder.getMessages();
+			messages = emailFolder.getMessages();
 			System.out.println("Total Message : " + messages.length);
 			String fileName ="";
 			for (int i = 0; i < messages.length; i++) {
@@ -77,7 +78,11 @@ public class ReceiveEmailWithAttachment {
 					}
 				}
 			}
-
+			
+			if(messages.length ==0)
+			{
+			  return messages.length;
+			}
 			emailFolder.close(false);
 			store.close();
 			FetchPdfData fetchPdfData = new FetchPdfData();
@@ -90,5 +95,7 @@ public class ReceiveEmailWithAttachment {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return messages.length;
 	}
+	
 }

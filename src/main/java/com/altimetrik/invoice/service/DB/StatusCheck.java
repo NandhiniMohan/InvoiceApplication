@@ -1,10 +1,11 @@
-package com.altimetrik.invoice.service;
+package com.altimetrik.invoice.service.DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class StatusCheck {
@@ -12,7 +13,7 @@ public class StatusCheck {
 	static int status = 0;
 
 	public static int doStatusCheck() throws SQLException {
-		
+		int i;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -23,7 +24,7 @@ public class StatusCheck {
           	String [] invoiceNumbers = new String[noOfInvoices];
           	String labeltext = "Enter the Invoice Number : ";
           	
-          	for (int i = 0; i < noOfInvoices; i++)
+          	for (i = 0; i < noOfInvoices; i++)
             { 
           		if(i != 0) {
           			labeltext = "Enter the Next Invoice Number  : "; 
@@ -33,12 +34,14 @@ public class StatusCheck {
                 status = stmt.executeUpdate("UPDATE INVOICEDATA SET STATUS = 'APPROVED' WHERE INVOICE_NO = " + invoiceNumbers[i]);
 
             }
-            
-   		} catch (Exception e) {
+          
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			connection.close();
 		}
+		
 		return status;
+		
 	}
 }
