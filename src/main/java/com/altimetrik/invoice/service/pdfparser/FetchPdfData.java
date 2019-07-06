@@ -4,32 +4,27 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import com.altimetrik.invoice.service.DB.InvoiceDB;
+import com.altimetrik.invoice.service.dao.InvoiceDB;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.mail.Address;
 
-public class FetchPdfData { 
-	
+public class FetchPdfData {
+
 	InvoiceDB invoiceDb = new InvoiceDB();
 
 	public void doPdfExtraction(File targetFile, Address From) throws InvalidPasswordException, IOException {
 
 		int count = 0;
-		if(targetFile == null)
-		{
-			System.out.println("No Mails Received!!!!!!");
-		}
-		else
-		{
+
 		try (PDDocument pdfDocument = PDDocument.load(targetFile)) {
 
 			pdfDocument.getClass();
 
 			if (!pdfDocument.isEncrypted()) {
-				
+
 				PDFTextStripper pdfTextStripper = new PDFTextStripper();
 				String pdfFileInText = pdfTextStripper.getText(pdfDocument);
 				String lines[] = pdfFileInText.split("\\r?\\n");
@@ -59,13 +54,13 @@ public class FetchPdfData {
 					}
 					if (line.equals("Total Invoice") || (line.equals("CREDIT"))) {
 						totalInvoice = lines[count];
-						invoiceDb.insertInvoiceDate(invoiceNo, invoiceDate, totalInvoice, customerPO, shipToAddress,
-								soldToAddress, remitToAddress , From);
+						invoiceDb.insertInvoiceData(invoiceNo, invoiceDate, totalInvoice, customerPO, shipToAddress,
+								soldToAddress, remitToAddress, From);
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}}
+	}
 }

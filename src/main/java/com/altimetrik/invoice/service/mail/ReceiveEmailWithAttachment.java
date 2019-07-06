@@ -20,23 +20,23 @@ import javax.mail.Store;
 import com.altimetrik.invoice.service.pdfparser.FetchPdfData;
 
 public class ReceiveEmailWithAttachment {
-	
-	static File targetFile;
-	static Address From ;
-	static Message[] messages;
-	
-	public static int receiveEmail(String pop3Host, String mailStoreType, String userName, String password) {
-		
+
+	File targetFile;
+	static Address From;
+	Message[] messages;
+
+	public int receiveEmail(String pop3Host, String mailStoreType, String userName, String password) {
+
 		Properties props = new Properties();
 		props.put("mail.store.protocol", "pop3");
 		props.put("mail.pop3.host", pop3Host);
 		props.put("mail.pop3.port", "995");
-		props.put("mail.pop3.starttls.enable", "true"); 
+		props.put("mail.pop3.starttls.enable", "true");
 
 		Session session = Session.getInstance(props);
 
 		try {
-			
+
 			Store store = session.getStore("pop3s");
 			store.connect(pop3Host, userName, password);
 
@@ -45,7 +45,7 @@ public class ReceiveEmailWithAttachment {
 
 			messages = emailFolder.getMessages();
 			System.out.println("Total Message : " + messages.length);
-			String fileName ="";
+			String fileName = "";
 			for (int i = 0; i < messages.length; i++) {
 				Message message = messages[i];
 				Address[] toAddress = message.getRecipients(Message.RecipientType.TO);
@@ -58,7 +58,7 @@ public class ReceiveEmailWithAttachment {
 				for (int j = 0; j < toAddress.length; j++) {
 					System.out.println(toAddress[j].toString());
 				}
-				
+
 				Object mpart = message.getContent();
 				if (mpart instanceof Multipart) {
 					Multipart multipart = (Multipart) mpart;
@@ -71,22 +71,20 @@ public class ReceiveEmailWithAttachment {
 							System.out.println("content type " + bodyPart.getContentType());
 							InputStream stream = (InputStream) bodyPart.getInputStream();
 							fileName = bodyPart.getFileName();
-							targetFile = new File(
-									"D:\\MailAttachment\\" + bodyPart.getFileName());
+							targetFile = new File("D:\\MailAttachment\\" + bodyPart.getFileName());
 							java.nio.file.Files.copy(stream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 						}
 					}
 				}
 			}
-			
-			if(messages.length ==0)
-			{
-			  return messages.length;
+
+			if (messages.length == 0) {
+				return messages.length;
 			}
 			emailFolder.close(false);
 			store.close();
 			FetchPdfData fetchPdfData = new FetchPdfData();
-			fetchPdfData.doPdfExtraction(targetFile , From); 
+			fetchPdfData.doPdfExtraction(targetFile, From);
 
 		} catch (NoSuchProviderException e) {
 			e.printStackTrace();
@@ -97,5 +95,5 @@ public class ReceiveEmailWithAttachment {
 		}
 		return messages.length;
 	}
-	
+
 }
