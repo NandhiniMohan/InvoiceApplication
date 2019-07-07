@@ -29,12 +29,12 @@ public class TestInvoiceDB {
 	public ResultSet resultSet;
 
 	@Before
-	public void setBefore() throws Exception {
+	public void setUp() throws Exception {
 		invoiceDataBase = new InvoiceDB();
 	}
 
 	@Test(expected = Exception.class)
-	public void displayInvoiceDetailsTest() throws SQLException, ClassNotFoundException {
+	public void InsertInvoiceDataTest() throws SQLException, ClassNotFoundException {
 		Mockito.doReturn(statement).when(connection.createStatement());
 		Mockito.doReturn(resultSet).when(statement.executeQuery(Mockito.anyString()));
 		Mockito.doReturn(false).doReturn(true).when(resultSet.next());
