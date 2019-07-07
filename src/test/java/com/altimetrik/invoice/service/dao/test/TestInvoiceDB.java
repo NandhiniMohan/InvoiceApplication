@@ -31,7 +31,6 @@ public class TestInvoiceDB {
 	@Before
 	public void setBefore() throws Exception {
 		invoiceDataBase = new InvoiceDB();
-
 	}
 
 	@Test(expected = Exception.class)
@@ -43,7 +42,6 @@ public class TestInvoiceDB {
 				.doReturn(Mockito.anyString()).doReturn(Mockito.anyString()).when(resultSet.getString(Mockito.anyInt()));
 		invoiceDataBase.insertInvoiceData("123456", "12/08/2019", "123.23", "12334565678", "shipToAddress",
 				"soldToAddress", "remitToAddress", From);
-		;
 	}
 
 }
